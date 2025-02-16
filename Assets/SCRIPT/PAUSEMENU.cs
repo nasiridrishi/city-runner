@@ -55,5 +55,6 @@ public class PAUSEMENU : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit(); 
+        ;;
     }
 }
