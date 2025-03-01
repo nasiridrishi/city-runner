@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed;
     public float turnTime;
     float turnSmoothVelocity;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
