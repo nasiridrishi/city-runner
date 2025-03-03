@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public float movementSpeed = 5f; // Speed of the player
     public float laneChangeSpeed = 3f; // Controls how quickly lane changes happen (lower = slower/more dramatic)
-    public float leanAngle = 15f; // How much the character leans during lane change
     
     [Range(-1, 1)]
     private int currentLane = 0; // -1 = Left, 0 = Middle, 1 = Right
@@ -19,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
     private int middleLane = 291;
     private int rightLane = 293;
     
-    private float turnSmoothVelocity;
     private Vector3 targetPosition;
     private float cooldownTimer = 0f; // Timer to track cooldown
     
@@ -27,8 +25,6 @@ public class PlayerMovement : MonoBehaviour
     private float laneChangeProgress = 0f;
     private float startLaneX;
     private float targetLaneX;
-    private Quaternion startRotation;
-    private Quaternion targetRotation;
 
     private void Start()
     {
@@ -85,21 +81,40 @@ public class PlayerMovement : MonoBehaviour
         startLaneX = transform.position.x;
         targetLaneX = lanes[currentLane];
         
-        // Set up rotation for leaning effect
-        startRotation = transform.rotation;
+        // Clear any existing animation states
+        ResetRollAnimations();
         
-        // Calculate lean direction based on which way we're moving
-        float leanZ = (currentLane > lastLane) ? -leanAngle : leanAngle;
-        targetRotation = Quaternion.Euler(0, 0, leanZ);
-        
-        // Optionally trigger a lane change animation
+        // Start the new appropriate animation
         if (animator != null)
         {
-            // Check if the animator has a LaneChange parameter before trying to set it
+            if (currentLane > lastLane) // Moving right
+            {
+                if (HasParameter("RollRight", animator))
+                    animator.SetBool("RollRight", true);
+            }
+            else // Moving left
+            {
+                if (HasParameter("RollLeft", animator))
+                    animator.SetBool("RollLeft", true);
+            }
+            
+            // Also trigger the general lane change animation if available
             if (HasParameter("LaneChange", animator))
             {
                 animator.SetTrigger("LaneChange");
             }
+        }
+    }
+    
+    private void ResetRollAnimations()
+    {
+        if (animator != null)
+        {
+            if (HasParameter("RollLeft", animator))
+                animator.SetBool("RollLeft", false);
+                
+            if (HasParameter("RollRight", animator))
+                animator.SetBool("RollRight", false);
         }
     }
     
@@ -121,7 +136,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Lane change complete
                 isChangingLane = false;
-                transform.rotation = startRotation; // Reset rotation
+                
+                // Reset the roll animation booleans
+                ResetRollAnimations();
             }
             else
             {
@@ -134,10 +151,6 @@ public class PlayerMovement : MonoBehaviour
                 // Calculate the horizontal movement needed
                 float horizontalMovement = currentX - transform.position.x;
                 movement.x = horizontalMovement;
-                
-                // Apply and then gradually remove lean effect
-                float leanFactor = Mathf.Sin(t * Mathf.PI); // Peak in middle of transition
-                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, leanFactor);
             }
         }
 
