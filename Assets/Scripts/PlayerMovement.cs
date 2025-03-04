@@ -36,6 +36,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity; // Stores vertical movement
     private bool isJumping = false;
 
+    private bool isSliding = false;
+    public float slideDuration = 1f; // How long the slide lasts
+    public float slideSpeedMultiplier = 1.5f; // Slide speed boost
+
     private void Start()
     {
         lanes.Add(-1, 289);
@@ -55,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
         HandleLaneChange();
         HandleJump();
+        HandleSlide();
         MovePlayer();
     }
 
@@ -100,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Space)) // Jump on space press
+            if (Input.GetKeyDown(KeyCode.Space) && !isSliding) // Jump on space press
             {
                 velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump force
                 isJumping = true;
@@ -115,6 +120,38 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y -= gravity * Time.deltaTime; // Apply gravity
         }
+    }
+
+    private void HandleSlide()
+    {
+        if (!isSliding && Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            StartCoroutine(Slide());
+        }
+    }
+
+    private IEnumerator Slide()
+    {
+        isSliding = true;
+
+        // Increase movement speed temporarily
+        float originalSpeed = movementSpeed;
+        movementSpeed *= slideSpeedMultiplier;
+
+        // Trigger slide animation if available
+        if (animator != null && HasParameter("Slide", animator))
+        {
+            animator.SetTrigger("Slide");
+        }
+
+        // Wait for slide duration
+        yield return new WaitForSeconds(slideDuration);
+
+        isSliding = false;
+        animator.ResetTrigger("Slide");
+        // Restore original movement speed
+        movementSpeed = originalSpeed;
+        animator.Play("Idle");
     }
 
     private void StartLaneChange()
