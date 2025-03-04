@@ -8,7 +8,11 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public float movementSpeed = 5f; // Speed of the player
     public float laneChangeSpeed = 3f; // Controls how quickly lane changes happen (lower = slower/more dramatic)
+    public float leanAngle = 15f; // How much the character leans during lane change
     
+    public float jumpHeight = 2f; // Height of the jump
+    public float gravity = 9.81f; // Gravity strength
+
     [Range(-1, 1)]
     private int currentLane = 0; // -1 = Left, 0 = Middle, 1 = Right
     [Range(-1, 1)]
@@ -18,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private int middleLane = 291;
     private int rightLane = 293;
     
+    private float turnSmoothVelocity;
     private Vector3 targetPosition;
     private float cooldownTimer = 0f; // Timer to track cooldown
     
@@ -25,6 +30,15 @@ public class PlayerMovement : MonoBehaviour
     private float laneChangeProgress = 0f;
     private float startLaneX;
     private float targetLaneX;
+    private Quaternion startRotation;
+    private Quaternion targetRotation;
+
+    private Vector3 velocity; // Stores vertical movement
+    private bool isJumping = false;
+
+    private bool isSliding = false;
+    public float slideDuration = 1f; // How long the slide lasts
+    public float slideSpeedMultiplier = 1.5f; // Slide speed boost
 
     private void Start()
     {
@@ -44,6 +58,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         HandleLaneChange();
+        HandleJump();
+        HandleSlide();
         MovePlayer();
     }
 
@@ -73,7 +89,71 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    
+
+    private void HandleJump()
+    {
+        if (controller.isGrounded)
+        {
+            if (isJumping)
+            {
+                // Player just landed, reset jump animation
+                isJumping = false;
+
+                if (animator != null && HasParameter("Jump", animator))
+                {
+                    animator.ResetTrigger("Jump");  // Reset jump trigger
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && !isSliding) // Jump on space press
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump force
+                isJumping = true;
+
+                if (animator != null && HasParameter("Jump", animator))
+                {
+                    animator.SetTrigger("Jump");  // Trigger jump animation
+                }
+            }
+        }
+        else
+        {
+            velocity.y -= gravity * Time.deltaTime; // Apply gravity
+        }
+    }
+
+    private void HandleSlide()
+    {
+        if (!isSliding && Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            StartCoroutine(Slide());
+        }
+    }
+
+    private IEnumerator Slide()
+    {
+        isSliding = true;
+
+        // Increase movement speed temporarily
+        float originalSpeed = movementSpeed;
+        movementSpeed *= slideSpeedMultiplier;
+
+        // Trigger slide animation if available
+        if (animator != null && HasParameter("Slide", animator))
+        {
+            animator.SetTrigger("Slide");
+        }
+
+        // Wait for slide duration
+        yield return new WaitForSeconds(slideDuration);
+
+        isSliding = false;
+        animator.ResetTrigger("Slide");
+        // Restore original movement speed
+        movementSpeed = originalSpeed;
+        animator.Play("Idle");
+    }
+
     private void StartLaneChange()
     {
         isChangingLane = true;
@@ -81,40 +161,21 @@ public class PlayerMovement : MonoBehaviour
         startLaneX = transform.position.x;
         targetLaneX = lanes[currentLane];
         
-        // Clear any existing animation states
-        ResetRollAnimations();
+        // Set up rotation for leaning effect
+        startRotation = transform.rotation;
         
-        // Start the new appropriate animation
+        // Calculate lean direction based on which way we're moving
+        float leanZ = (currentLane > lastLane) ? -leanAngle : leanAngle;
+        targetRotation = Quaternion.Euler(0, 0, leanZ);
+        
+        // Optionally trigger a lane change animation
         if (animator != null)
         {
-            if (currentLane > lastLane) // Moving right
-            {
-                if (HasParameter("RollRight", animator))
-                    animator.SetBool("RollRight", true);
-            }
-            else // Moving left
-            {
-                if (HasParameter("RollLeft", animator))
-                    animator.SetBool("RollLeft", true);
-            }
-            
-            // Also trigger the general lane change animation if available
+            // Check if the animator has a LaneChange parameter before trying to set it
             if (HasParameter("LaneChange", animator))
             {
                 animator.SetTrigger("LaneChange");
             }
-        }
-    }
-    
-    private void ResetRollAnimations()
-    {
-        if (animator != null)
-        {
-            if (HasParameter("RollLeft", animator))
-                animator.SetBool("RollLeft", false);
-                
-            if (HasParameter("RollRight", animator))
-                animator.SetBool("RollRight", false);
         }
     }
     
@@ -136,9 +197,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Lane change complete
                 isChangingLane = false;
-                
-                // Reset the roll animation booleans
-                ResetRollAnimations();
+                transform.rotation = startRotation; // Reset rotation
             }
             else
             {
@@ -151,8 +210,15 @@ public class PlayerMovement : MonoBehaviour
                 // Calculate the horizontal movement needed
                 float horizontalMovement = currentX - transform.position.x;
                 movement.x = horizontalMovement;
+                
+                // Apply and then gradually remove lean effect
+                float leanFactor = Mathf.Sin(t * Mathf.PI); // Peak in middle of transition
+                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, leanFactor);
             }
         }
+
+        // Apply vertical movement
+        movement.y = velocity.y * Time.deltaTime;
 
         // Apply movement using the CharacterController
         controller.Move(movement);
