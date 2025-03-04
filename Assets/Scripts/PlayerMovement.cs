@@ -8,7 +8,9 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public float movementSpeed = 5f; // Speed of the player
     public float laneChangeSpeed = 3f; // Controls how quickly lane changes happen (lower = slower/more dramatic)
-    
+    public float jumpHeight = 2f; // Height of the jump
+    public float gravity = 9.81f; // Gravity strength
+
     [Range(-1, 1)]
     private int currentLane = 0; // -1 = Left, 0 = Middle, 1 = Right
     [Range(-1, 1)]
@@ -25,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
     private float laneChangeProgress = 0f;
     private float startLaneX;
     private float targetLaneX;
+
+    private Vector3 velocity; // Stores vertical movement
+    private bool isJumping = false;
 
     private void Start()
     {
@@ -44,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         HandleLaneChange();
+        HandleJump();
         MovePlayer();
     }
 
@@ -73,7 +79,39 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    
+
+    private void HandleJump()
+    {
+        if (controller.isGrounded)
+        {
+            if (isJumping)
+            {
+                // Player just landed, reset jump animation
+                isJumping = false;
+
+                if (animator != null && HasParameter("Jump", animator))
+                {
+                    animator.ResetTrigger("Jump");  // Reset jump trigger
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space)) // Jump on space press
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump force
+                isJumping = true;
+
+                if (animator != null && HasParameter("Jump", animator))
+                {
+                    animator.SetTrigger("Jump");  // Trigger jump animation
+                }
+            }
+        }
+        else
+        {
+            velocity.y -= gravity * Time.deltaTime; // Apply gravity
+        }
+    }
+
     private void StartLaneChange()
     {
         isChangingLane = true;
@@ -153,6 +191,9 @@ public class PlayerMovement : MonoBehaviour
                 movement.x = horizontalMovement;
             }
         }
+
+        // Apply vertical movement
+        movement.y = velocity.y * Time.deltaTime;
 
         // Apply movement using the CharacterController
         controller.Move(movement);
