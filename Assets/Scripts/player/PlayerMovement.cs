@@ -102,7 +102,6 @@ namespace Player
                 {
                     // Execute instant turn
                     PerformInstantTurn(turnPoint);
-                    Destroy(turnPoint.gameObject); // Remove turn point after use
                     break;
                 }
             }

@@ -37,19 +37,19 @@ namespace Player
 
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-                if (currentLane < 1)
+                if (currentLane > -1)
                 {
                     lastLane = currentLane;
-                    currentLane++;
+                    currentLane--;
                     StartLaneChange();
                 }
             }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                if (currentLane > -1)
+                if (currentLane < 1)
                 {
                     lastLane = currentLane;
-                    currentLane--;
+                    currentLane++;
                     StartLaneChange();
                 }
             }
@@ -64,7 +64,7 @@ namespace Player
             // Store rotation for leaning effect
             startRotation = transform.rotation;
             
-            float leanZ = (currentLane > lastLane) ? -leanAngle : leanAngle;
+            float leanZ = (currentLane > lastLane) ? leanAngle : -leanAngle;
             targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanZ);
 
             // Calculate target position
