@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Player;
 using UnityEngine;
@@ -7,32 +8,45 @@ namespace coin
     public class CoinSpawner : MonoBehaviour
     {
         public GameObject coinPrefab;
-        public Transform playerTransform;
         public float spawnDistance = 50f;
         public float despawnDistance = 10f;
-        public float laneWidth = 2f;
+        public float laneWidth = 3f;
 
         public float coinSpawnInterval = 5f;
         public float minHorizontalSpacing = 3f;
         public int coinsPerPattern = 10;
+        public float minDistanceToTriggerSpawn = 5f;
 
         private Vector3 lastSpawnPosition;
         private float lastSpawnZ = 0f;
         private readonly List<GameObject> spawnedCoins = new List<GameObject>();
         private Dictionary<int, float> lastLaneSpawnZ = new Dictionary<int, float>();
+        private bool listenForTurns = false;
 
         private void Start()
         {
-            lastSpawnPosition = playerTransform.position;
+            lastSpawnPosition = transform.position;
             InitializeLaneTracking();
-
-            var turnHandler = playerTransform.GetComponent<PlayerTurnHandler>();
-            if (turnHandler != null)
-                turnHandler.OnPlayerTurn += OnPlayerTurn;
-            else
-                Debug.LogWarning("PlayerTurnHandler not found on player");
-
+            ConnectToTurnHandler();
             SpawnCoinsAhead();
+            Debug.Log("CoinSpawner initialized with player at " + transform.position);
+        }
+
+        private void ConnectToTurnHandler()
+        {
+            if (transform == null) return;
+
+            var turnHandler = transform.GetComponent<PlayerTurnHandler>();
+            if (turnHandler != null)
+            {
+                turnHandler.OnPlayerTurn += OnPlayerTurn;
+                listenForTurns = true;
+                Debug.Log("Connected to PlayerTurnHandler successfully");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerTurnHandler not found on player");
+            }
         }
 
         private void InitializeLaneTracking()
@@ -44,14 +58,33 @@ namespace coin
 
         private void Update()
         {
-            var playerPosXZ = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
+            if (transform == null) return;
+
+            // Try to connect to turn handler if not already connected
+            if (!listenForTurns)
+            {
+                ConnectToTurnHandler();
+            }
+
+            // Check if player has moved enough to spawn more coins
+            var playerPosXZ = new Vector3(transform.position.x, 0, transform.position.z);
             var lastSpawnPosXZ = new Vector3(lastSpawnPosition.x, 0, lastSpawnPosition.z);
             var distanceMoved = Vector3.Distance(playerPosXZ, lastSpawnPosXZ);
-
-            if (distanceMoved >= 5f)
+    
+            // Draw debug line showing distance
+            Debug.DrawLine(lastSpawnPosXZ + Vector3.up, playerPosXZ + Vector3.up, Color.yellow);
+    
+            // Add more logging to understand the values
+            if (Time.frameCount % 60 == 0) // Log every 60 frames to avoid spam
             {
+                Debug.Log($"Current distance: {distanceMoved:F2}, Threshold: {minDistanceToTriggerSpawn:F2}");
+            }
+
+            if (distanceMoved >= minDistanceToTriggerSpawn)
+            {
+                Debug.Log($"Player moved {distanceMoved:F2}m - spawning more coins");
                 SpawnCoinsAhead();
-                lastSpawnPosition = playerTransform.position;
+                lastSpawnPosition = transform.position;
             }
 
             CleanupCoins();
@@ -59,9 +92,9 @@ namespace coin
 
         private void OnDestroy()
         {
-            if (playerTransform != null)
+            if (transform != null)
             {
-                var turnHandler = playerTransform.GetComponent<PlayerTurnHandler>();
+                var turnHandler = transform.GetComponent<PlayerTurnHandler>();
                 if (turnHandler != null)
                     turnHandler.OnPlayerTurn -= OnPlayerTurn;
             }
@@ -69,23 +102,23 @@ namespace coin
 
         private void SpawnCoinsAhead()
         {
-            var playerForward = playerTransform.forward;
-            var playerRight = playerTransform.right;
+            if (transform == null) return;
+
+            var playerForward = transform.forward;
+            var playerRight = transform.right;
 
             int pattern = Random.Range(0, 4);
-            float spawnZ = 0f; // Start from near the player after turning
+            float spawnZ = 0f; // Start from near the player
             float spawnLength = spawnDistance;
             int coinsSpawned = 0;
 
-            // Debug visual to verify spawn direction
-            Debug.DrawRay(playerTransform.position, playerForward * spawnDistance, Color.blue, 5f);
-            Debug.DrawRay(playerTransform.position, playerRight * 5, Color.red, 5f);
+            Debug.DrawRay(transform.position, playerForward * spawnDistance, Color.blue, 1f);
 
             while (spawnZ < spawnLength && coinsSpawned < coinsPerPattern)
             {
                 List<int> potentialLanes = GetLanesForPattern(pattern, coinsSpawned);
                 List<int> validLanes = new List<int>();
-                
+
                 foreach (int lane in potentialLanes)
                 {
                     if (!lastLaneSpawnZ.ContainsKey(lane) ||
@@ -101,14 +134,11 @@ namespace coin
                     var laneOffset = playerRight * (laneWidth * selectedLane);
 
                     // Calculate spawn position relative to player's current orientation
-                    var spawnPosition = playerTransform.position +
-                                      playerForward * (spawnZ + 10f) + // Start a bit further from player
-                                      laneOffset;
+                    var spawnPosition = transform.position +
+                                        playerForward * (spawnZ + 10f) + // Start a bit further from player
+                                        laneOffset;
 
                     spawnPosition.y += 1.0f;
-
-                    // Debug spawn position
-                    Debug.DrawLine(playerTransform.position, spawnPosition, Color.green, 1f);
 
                     var coin = Instantiate(coinPrefab, spawnPosition, Quaternion.Euler(90, 0, 0));
                     spawnedCoins.Add(coin);
@@ -121,6 +151,7 @@ namespace coin
             }
 
             lastSpawnZ = spawnZ;
+            Debug.Log($"Spawned {coinsSpawned} coins ahead of player");
         }
 
         private List<int> GetLanesForPattern(int pattern, int position)
@@ -162,9 +193,9 @@ namespace coin
                 }
 
                 var coinPos = spawnedCoins[i].transform.position;
-                var playerPos = playerTransform.position;
+                var playerPos = transform.position;
                 var playerToCoins = coinPos - playerPos;
-                var dotProduct = Vector3.Dot(playerToCoins, playerTransform.forward);
+                var dotProduct = Vector3.Dot(playerToCoins, transform.forward);
 
                 if (dotProduct < -despawnDistance)
                 {
@@ -176,11 +207,11 @@ namespace coin
 
         private void OnPlayerTurn(float turnAngle)
         {
-            // Wait a frame to ensure player transform is fully updated
+            Debug.Log("Player turned, respawning coins");
             StartCoroutine(DelayedSpawnAfterTurn());
         }
 
-        private System.Collections.IEnumerator DelayedSpawnAfterTurn()
+        private IEnumerator DelayedSpawnAfterTurn()
         {
             // Clear existing coins
             foreach (var coin in spawnedCoins)
@@ -195,6 +226,9 @@ namespace coin
             // Reset tracking variables
             lastSpawnZ = 0f;
             InitializeLaneTracking();
+
+            // CRITICAL: Update lastSpawnPosition to current player position
+            lastSpawnPosition = transform.position;
 
             // Spawn new coins in the player's new direction
             SpawnCoinsAhead();
