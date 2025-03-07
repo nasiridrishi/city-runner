@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Player
 {
-    public class player : MonoBehaviour
+    public class Player : MonoBehaviour
     {
         public Text ui;
         public int score = 0;

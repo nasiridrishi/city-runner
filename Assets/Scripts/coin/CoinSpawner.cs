@@ -22,8 +22,7 @@ namespace coin
 
         private void Start()
         {
-            if (playerTransform == null) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
+            Debug.Log("Coin Spawner started");
             // Initialize spawn positions for each lane
             foreach (var config in laneConfigurations) nextSpawnPositions[config.laneIndex] = 0f;
 
@@ -31,6 +30,10 @@ namespace coin
 
             // Subscribe to player turn events
             var turnHandler = playerTransform.GetComponent<PlayerTurnHandler>();
+            if (turnHandler == null)
+            {
+                Debug.Log("Turn handler is null");
+            }
             if (turnHandler != null) turnHandler.OnPlayerTurn += OnPlayerTurn;
         }
 
@@ -64,6 +67,11 @@ namespace coin
 
         private void SpawnCoinsAhead()
         {
+            Debug.Log("Spawn Coins Ahead");
+            if (laneConfigurations.Count == 0)
+            {
+                Debug.LogWarning("No lane configurations found");
+            }
             var playerForward = playerTransform.forward;
             var playerRight = playerTransform.right;
 
@@ -130,6 +138,8 @@ namespace coin
 
         private void OnPlayerTurn(float turnAngle)
         {
+            
+            Debug.Log("onPlayer Turn Listener");
             // Clear and reset spawning when player turns
             foreach (var coin in spawnedCoins)
                 if (coin != null)
