@@ -22,6 +22,7 @@ namespace Player
 
         private void OnTriggerEnter(Collider other)
         {
+            Debug.Log("Collision detected with : " + other.tag);
             if (other.tag.Equals("coin"))
             {
                 score++;
