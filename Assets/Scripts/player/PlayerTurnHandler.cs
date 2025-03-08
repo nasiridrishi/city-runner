@@ -34,6 +34,10 @@ namespace Player
             {
                 laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
             }
+            else
+            {
+                Debug.LogWarning("PlayerTurnHandler requires a PlayerLaneHandler component on the same GameObject.");
+            }
         }
         
         private void Update()

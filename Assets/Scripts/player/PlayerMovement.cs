@@ -14,9 +14,17 @@ namespace Player
         private Vector3 targetPosition;
 
         private Vector3 velocity; // Stores vertical movement
-        private bool isJumping = false;
 
-        private bool isSliding = false;
+        public bool IsJumping
+        {
+            get;
+            private set;
+        }
+
+        public bool IsSliding {
+            get;
+            private set;
+        }
         public float slideDuration = 1f; // How long the slide lasts
         public float slideSpeedMultiplier = 1.5f; // Slide speed boost
 
@@ -81,12 +89,12 @@ namespace Player
 
         private void HandleJump()
         {
-            if (controller.isGrounded)
+            if (controller.isGrounded && !isTurning())
             {
-                if (isJumping)
+                if (IsJumping)
                 {
                     // Player just landed, reset jump animation
-                    isJumping = false;
+                    IsJumping = false;
 
                     if (animator != null && HasParameter("Jump", animator))
                     {
@@ -94,10 +102,10 @@ namespace Player
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Space) && !isSliding) // Jump on space press
+                if (Input.GetKeyDown(KeyCode.Space) && !IsSliding) // Jump on space press
                 {
                     velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump force
-                    isJumping = true;
+                    IsJumping = true;
 
                     if (animator != null && HasParameter("Jump", animator))
                     {
@@ -113,7 +121,7 @@ namespace Player
 
         private void HandleSlide()
         {
-            if (!isSliding && Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            if ((!IsSliding && Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isTurning())
             {
                 StartCoroutine(Slide());
             }
@@ -121,7 +129,7 @@ namespace Player
 
         private IEnumerator Slide()
         {
-            isSliding = true;
+            IsSliding = true;
 
             // Increase movement speed temporarily
             float originalSpeed = movementSpeed;
@@ -136,7 +144,7 @@ namespace Player
             // Wait for slide duration
             yield return new WaitForSeconds(slideDuration);
 
-            isSliding = false;
+            IsSliding = false;
             animator.ResetTrigger("Slide");
             // Restore original movement speed
             movementSpeed = originalSpeed;
@@ -186,6 +194,11 @@ namespace Player
             {
                 animator.SetFloat("MovementSpeed", movementSpeed);
             }
+        }
+
+        private bool isTurning()
+        {
+            return GetComponent<PlayerTurnHandler>().IsTurning;
         }
 
         // Helper method to check if an animator has a parameter
