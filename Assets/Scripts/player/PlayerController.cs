@@ -5,24 +5,39 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
+        //spell cooldown
+        private static int SPELL_COOLDOWN = 2; //seconds
+        private int currentSpellCooldown = 0; //time stamp
         public Animator animator;
         
         private void Update()
         { 
             if (Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.Mouse0))
             {
-                setMagic();
+                setSpell();
             }
+            //spell cooldown
         }
          
-        private void setMagic()
+        private void setSpell()
         {
-            animator.SetTrigger("Magic");
+            //check if spell is on cooldown in timestamp seconds
+            int currentTime = (int) Time.time;
+            if (currentSpellCooldown + SPELL_COOLDOWN < currentTime)
+            {
+                animator.SetTrigger("Spell");
+                currentSpellCooldown = currentTime;
+            }
         }
         
-        private void stopMagic()
+        private void stopSpell()
         {
-            animator.ResetTrigger("Magic");
+            animator.ResetTrigger("Spell");
+        }
+
+        public void fireSpell()
+        {
+            Debug.Log("Spell fired");
         }
         
     }
