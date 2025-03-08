@@ -33,7 +33,7 @@ namespace Player
 
         private void HandleLaneInput()
         {
-            if (isChangingLane) return;
+            if (!canChangeLane()) return;
 
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
@@ -146,6 +146,13 @@ namespace Player
             // Recalculate target position with new orientation
             CalculateTargetLanePosition();
         }
+        
+        private bool canChangeLane()
+        {
+            bool isSliding = GetComponent<PlayerMovement>().IsSliding;
+            bool isJumping = GetComponent<PlayerMovement>().IsJumping;
+            return !isChangingLane && !isTurning() && !isSliding && !isJumping;
+        }
 
         // Helper methods
         private bool HasParameter(string paramName, Animator animator)
@@ -161,6 +168,11 @@ namespace Player
         private float EaseInOutSine(float x)
         {
             return -(Mathf.Cos(Mathf.PI * x) - 1) / 2;
+        }
+
+        private bool isTurning()
+        {
+            return GetComponent<PlayerTurnHandler>().IsTurning;
         }
     }
 }
