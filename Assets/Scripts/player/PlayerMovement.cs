@@ -15,16 +15,9 @@ namespace Player
 
         private Vector3 velocity; // Stores vertical movement
 
-        public bool IsJumping
-        {
-            get;
-            private set;
-        }
+        public bool IsJumping { get; private set; }
 
-        public bool IsSliding {
-            get;
-            private set;
-        }
+        public bool IsSliding { get; private set; }
         public float slideDuration = 1f; // How long the slide lasts
         public float slideSpeedMultiplier = 1.5f; // Slide speed boost
 
@@ -44,17 +37,11 @@ namespace Player
 
             // Get lane handler
             laneHandler = GetComponent<PlayerLaneHandler>();
-            if (laneHandler == null)
-            {
-                laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
-            }
+            if (laneHandler == null) laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
 
             // Get turn handler
             turnHandler = GetComponent<PlayerTurnHandler>();
-            if (turnHandler == null)
-            {
-                turnHandler = gameObject.AddComponent<PlayerTurnHandler>();
-            }
+            if (turnHandler == null) turnHandler = gameObject.AddComponent<PlayerTurnHandler>();
 
             // Subscribe to lane movement events
             laneHandler.OnLaneMovement += ApplyLateralMovement;
@@ -81,7 +68,7 @@ namespace Player
             // Update direction vectors in case they've changed due to turns
             forwardDirection = transform.forward;
             rightDirection = transform.right;
-            
+
             HandleJump();
             HandleSlide();
             MovePlayer();
@@ -97,9 +84,7 @@ namespace Player
                     IsJumping = false;
 
                     if (animator != null && HasParameter("Jump", animator))
-                    {
                         animator.ResetTrigger("Jump"); // Reset jump trigger
-                    }
                 }
 
                 if (Input.GetKeyDown(KeyCode.Space) && !IsSliding) // Jump on space press
@@ -108,9 +93,7 @@ namespace Player
                     IsJumping = true;
 
                     if (animator != null && HasParameter("Jump", animator))
-                    {
                         animator.SetTrigger("Jump"); // Trigger jump animation
-                    }
                 }
             }
             else
@@ -121,10 +104,8 @@ namespace Player
 
         private void HandleSlide()
         {
-            if ((!IsSliding && Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isTurning())
-            {
+            if (((!IsSliding && Input.GetKeyDown(KeyCode.S)) || Input.GetKeyDown(KeyCode.DownArrow)) && !isTurning())
                 StartCoroutine(Slide());
-            }
         }
 
         private IEnumerator Slide()
@@ -132,14 +113,11 @@ namespace Player
             IsSliding = true;
 
             // Increase movement speed temporarily
-            float originalSpeed = movementSpeed;
+            var originalSpeed = movementSpeed;
             movementSpeed *= slideSpeedMultiplier;
 
             // Trigger slide animation if available
-            if (animator != null && HasParameter("Slide", animator))
-            {
-                animator.SetTrigger("Slide");
-            }
+            if (animator != null && HasParameter("Slide", animator)) animator.SetTrigger("Slide");
 
             // Wait for slide duration
             yield return new WaitForSeconds(slideDuration);
@@ -154,7 +132,7 @@ namespace Player
         private void MovePlayer()
         {
             // Create movement vector
-            Vector3 movement = Vector3.zero;
+            var movement = Vector3.zero;
 
             // Determine primary movement axis based on player orientation
             if (Mathf.Abs(transform.forward.z) > Mathf.Abs(transform.forward.x))
@@ -163,10 +141,7 @@ namespace Player
                 movement.z = Mathf.Sign(transform.forward.z) * movementSpeed * Time.deltaTime;
 
                 // Apply lane movement from lane handler if present
-                if (lateralMovement != Vector3.zero)
-                {
-                    movement.x = lateralMovement.x;
-                }
+                if (lateralMovement != Vector3.zero) movement.x = lateralMovement.x;
             }
             else
             {
@@ -174,10 +149,7 @@ namespace Player
                 movement.x = Mathf.Sign(transform.forward.x) * movementSpeed * Time.deltaTime;
 
                 // Apply lane movement from lane handler if present
-                if (lateralMovement != Vector3.zero)
-                {
-                    movement.z = lateralMovement.z;
-                }
+                if (lateralMovement != Vector3.zero) movement.z = lateralMovement.z;
             }
 
             // Reset lateral movement after applied
@@ -190,10 +162,7 @@ namespace Player
             controller.Move(movement);
 
             // Update animator speed
-            if (animator != null)
-            {
-                animator.SetFloat("MovementSpeed", movementSpeed);
-            }
+            if (animator != null) animator.SetFloat("MovementSpeed", movementSpeed);
         }
 
         private bool isTurning()
@@ -204,11 +173,9 @@ namespace Player
         // Helper method to check if an animator has a parameter
         private bool HasParameter(string paramName, Animator animator)
         {
-            foreach (AnimatorControllerParameter param in animator.parameters)
-            {
+            foreach (var param in animator.parameters)
                 if (param.name == paramName)
                     return true;
-            }
 
             return false;
         }

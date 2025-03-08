@@ -25,10 +25,7 @@ namespace Player
         {
             HandleLaneInput();
 
-            if (isChangingLane)
-            {
-                ProcessLaneChange();
-            }
+            if (isChangingLane) ProcessLaneChange();
         }
 
         private void HandleLaneInput()
@@ -63,35 +60,32 @@ namespace Player
 
             // Store rotation for leaning effect
             startRotation = transform.rotation;
-            
-            float leanZ = (currentLane > lastLane) ? leanAngle : -leanAngle;
+
+            var leanZ = currentLane > lastLane ? leanAngle : -leanAngle;
             targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanZ);
 
             // Calculate target position
             CalculateTargetLanePosition();
 
             // Trigger animation if available
-            Animator animator = GetComponent<Animator>();
-            if (animator != null && HasParameter("LaneChange", animator))
-            {
-                animator.SetTrigger("LaneChange");
-            }
+            var animator = GetComponent<Animator>();
+            if (animator != null && HasParameter("LaneChange", animator)) animator.SetTrigger("LaneChange");
         }
 
         private void CalculateTargetLanePosition()
         {
             // Get the right vector perpendicular to forward direction
-            Vector3 rightVector = Vector3.Cross(transform.forward, Vector3.up).normalized;
+            var rightVector = Vector3.Cross(transform.forward, Vector3.up).normalized;
 
             // Calculate base position (middle lane position)
-            Vector3 basePosition = transform.position;
-            
+            var basePosition = transform.position;
+
             // Remove any previous lane offset
             if (lastLane == -1)
                 basePosition += rightVector * laneWidth;
             else if (lastLane == 1)
                 basePosition -= rightVector * laneWidth;
-                
+
             // Apply new lane offset
             if (currentLane == -1) // Left lane
                 targetLanePosition = basePosition - rightVector * laneWidth;
@@ -111,27 +105,27 @@ namespace Player
                 // Lane change complete
                 isChangingLane = false;
                 transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0); // Reset Z rotation
-                
+
                 // Ensure player is exactly at target position
-                Vector3 finalMovement = targetLanePosition - transform.position;
+                var finalMovement = targetLanePosition - transform.position;
                 OnLaneMovement?.Invoke(finalMovement);
             }
             else
             {
                 // Create a smooth curve for lane changing
-                float t = EaseInOutSine(laneChangeProgress);
+                var t = EaseInOutSine(laneChangeProgress);
 
                 // Calculate current position along the path
-                Vector3 newPosition = Vector3.Lerp(startPosition, targetLanePosition, t);
-                
+                var newPosition = Vector3.Lerp(startPosition, targetLanePosition, t);
+
                 // Calculate movement needed this frame
-                Vector3 movement = newPosition - transform.position;
-                
+                var movement = newPosition - transform.position;
+
                 // Apply movement via event
                 OnLaneMovement?.Invoke(movement);
 
                 // Apply lean effect
-                float leanFactor = Mathf.Sin(t * Mathf.PI);
+                var leanFactor = Mathf.Sin(t * Mathf.PI);
                 transform.rotation = Quaternion.Slerp(startRotation, targetRotation, leanFactor);
             }
         }
@@ -146,22 +140,20 @@ namespace Player
             // Recalculate target position with new orientation
             CalculateTargetLanePosition();
         }
-        
+
         private bool canChangeLane()
         {
-            bool isSliding = GetComponent<PlayerMovement>().IsSliding;
-            bool isJumping = GetComponent<PlayerMovement>().IsJumping;
+            var isSliding = GetComponent<PlayerMovement>().IsSliding;
+            var isJumping = GetComponent<PlayerMovement>().IsJumping;
             return !isChangingLane && !isTurning() && !isSliding && !isJumping;
         }
 
         // Helper methods
         private bool HasParameter(string paramName, Animator animator)
         {
-            foreach (AnimatorControllerParameter param in animator.parameters)
-            {
+            foreach (var param in animator.parameters)
                 if (param.name == paramName)
                     return true;
-            }
             return false;
         }
 
