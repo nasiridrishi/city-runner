@@ -11,9 +11,7 @@ namespace Player
         public float jumpHeight = 2f; // Height of the jump
         public float gravity = 9.81f; // Gravity strength
 
-        private float turnSmoothVelocity;
         private Vector3 targetPosition;
-        private float cooldownTimer = 0f; // Timer to track cooldown
 
         private Vector3 velocity; // Stores vertical movement
         private bool isJumping = false;
@@ -22,22 +20,14 @@ namespace Player
         public float slideDuration = 1f; // How long the slide lasts
         public float slideSpeedMultiplier = 1.5f; // Slide speed boost
 
-        private bool isTurning = false;
-        public float turnDetectionRadius = 1f; // How close to trigger a turn point
-        private Vector3 forwardDirection; // Current direction of player movement
-        private Vector3 rightDirection; // Right vector perpendicular to movement
-        private float turnProgress = 0f;
-        private Vector3 turnCenter;
-        private float turnStartAngle;
-        private float turnEndAngle;
-        private float currentTurnRadius;
-        private float turnSpeedMultiplier = 1f;
+        // Reference vectors for movement
+        private Vector3 forwardDirection;
+        private Vector3 rightDirection;
 
         // Lane handler integration
         private PlayerLaneHandler laneHandler;
+        private PlayerTurnHandler turnHandler;
         private Vector3 lateralMovement = Vector3.zero;
-
-        public float turnCooldown = 0.5f; // Cooldown time in seconds after each turn
 
         private void Start()
         {
@@ -49,6 +39,13 @@ namespace Player
             if (laneHandler == null)
             {
                 laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
+            }
+
+            // Get turn handler
+            turnHandler = GetComponent<PlayerTurnHandler>();
+            if (turnHandler == null)
+            {
+                turnHandler = gameObject.AddComponent<PlayerTurnHandler>();
             }
 
             // Subscribe to lane movement events
@@ -73,118 +70,13 @@ namespace Player
 
         private void Update()
         {
-            // Update cooldown timer
-            if (cooldownTimer > 0)
-            {
-                cooldownTimer -= Time.deltaTime;
-            }
-
-            CheckForTurnPoints();
+            // Update direction vectors in case they've changed due to turns
+            forwardDirection = transform.forward;
+            rightDirection = transform.right;
+            
             HandleJump();
             HandleSlide();
             MovePlayer();
-        }
-
-        private void CheckForTurnPoints()
-        {
-            // Cast a small sphere forward to detect turn points
-            RaycastHit[] hits = Physics.SphereCastAll(
-                transform.position,
-                turnDetectionRadius,
-                transform.forward,
-                turnDetectionRadius * 2
-            );
-
-            foreach (RaycastHit hit in hits)
-            {
-                PlayerTurnPoint turnPoint = hit.collider.GetComponent<PlayerTurnPoint>();
-                if (turnPoint != null && !isTurning)
-                {
-                    // Execute instant turn
-                    PerformInstantTurn(turnPoint);
-                    break;
-                }
-            }
-        }
-
-        private void PerformInstantTurn(PlayerTurnPoint turnPoint)
-        {
-            // Only proceed if not on cooldown
-            if (cooldownTimer <= 0)
-            {
-                // Return to the original logic
-                float yRotation = turnPoint.direction == PlayerTurnPoint.TurnDirection.Left ?
-                   -turnPoint.turnAngle : turnPoint.turnAngle;
-
-                // Apply instant rotation around Y axis
-
-                //transform.Rotate(0, yRotation, 0);
-                StartCoroutine(SmoothTurn(yRotation));
-
-                // Update direction vectors
-                //forwardDirection = transform.forward;
-                //rightDirection = transform.right;
-
-                // Notify lane handler about turn
-                laneHandler.ResetLaneOnTurn();
-
-                // Set cooldown timer
-                cooldownTimer = turnCooldown;
-
-                // Optional: Trigger turn animation if available
-                if (animator != null && HasParameter("Turn", animator))
-                {
-                    animator.SetTrigger("Turn");
-                }
-            }
-        }
-
-        private IEnumerator SmoothTurn(float yRotation)
-        {
-            Quaternion startRotation = transform.rotation;
-            Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + yRotation, 0);
-            float duration = 0.3f; // Adjust duration for desired smoothness
-            float elapsedTime = 0;
-
-            while (elapsedTime < duration)
-            {
-                transform.rotation = Quaternion.Lerp(startRotation, targetRotation, elapsedTime / duration);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            // Ensure final rotation is exactly the target rotation
-            transform.rotation = targetRotation;
-
-            // Update direction vectors after rotation
-            forwardDirection = transform.forward;
-            rightDirection = transform.right;
-        }
-
-        private void StartTurn(PlayerTurnPoint turnPoint)
-        {
-            isTurning = true;
-            turnProgress = 0f;
-            turnSpeedMultiplier = turnPoint.turnSpeed;
-
-            // Calculate turn direction based on turnPoint.direction
-            float angle = turnPoint.turnAngle;
-            currentTurnRadius = turnPoint.turnRadius;
-
-            // Calculate turn center point (center of the arc)
-            Vector3 turnDir = turnPoint.direction == PlayerTurnPoint.TurnDirection.Left ?
-                -rightDirection : rightDirection;
-            turnCenter = transform.position + turnDir * currentTurnRadius;
-
-            // Calculate start and end angles for the arc
-            Vector3 startVector = transform.position - turnCenter;
-            turnStartAngle = Mathf.Atan2(startVector.z, startVector.x) * Mathf.Rad2Deg;
-
-            // End angle depends on turn direction
-            if (turnPoint.direction == PlayerTurnPoint.TurnDirection.Left)
-                turnEndAngle = turnStartAngle + angle;
-            else
-                turnEndAngle = turnStartAngle - angle;
         }
 
         private void HandleJump()
@@ -306,12 +198,6 @@ namespace Player
             }
 
             return false;
-        }
-
-        // Easing function to make lane changes more dramatic
-        private float EaseInOutSine(float x)
-        {
-            return -(Mathf.Cos(Mathf.PI * x) - 1) / 2;
         }
     }
 }

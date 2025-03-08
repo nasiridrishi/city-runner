@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4320438425812109650}
   - component: {fileID: 4320438425812109651}
   - component: {fileID: 4320438425812109652}
-  - component: {fileID: 4320438425812109653}
   - component: {fileID: 4320438425812109654}
   - component: {fileID: 4320438425812109655}
+  - component: {fileID: 9223192600350556502}
   m_Layer: 0
   m_Name: coin
   m_TagString: coin
@@ -102,18 +102,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &4320438425812109653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4320438425812109640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e88450af97b88fa469b89597891546ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &4320438425812109654
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -151,3 +139,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9223192600350556502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320438425812109640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd4bb427a83eb184d9446ef3c82c8f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
