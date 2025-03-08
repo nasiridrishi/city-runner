@@ -47,7 +47,7 @@ namespace Player
 
             foreach (var hit in hits)
             {
-                var turnPoint = hit.collider.GetComponent<PlayerTurnPoint>();
+                var turnPoint = hit.collider.GetComponent<RoadTurnPoint>();
                 if (turnPoint != null && cooldownTimer <= 0)
                 {
                     PerformTurn(turnPoint);
@@ -56,9 +56,9 @@ namespace Player
             }
         }
 
-        private void PerformTurn(PlayerTurnPoint turnPoint)
+        private void PerformTurn(RoadTurnPoint turnPoint)
         {
-            var yRotation = turnPoint.direction == PlayerTurnPoint.TurnDirection.Left
+            var yRotation = turnPoint.direction == RoadTurnPoint.TurnDirection.Left
                 ? -turnPoint.turnAngle
                 : turnPoint.turnAngle;
 

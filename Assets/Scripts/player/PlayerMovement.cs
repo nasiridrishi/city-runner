@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Player
 {
+    [RequireComponent(typeof(PlayerLaneHandler))]
     public class PlayerMovement : MonoBehaviour
     {
         public Animator animator;
@@ -11,8 +12,6 @@ namespace Player
         public float jumpHeight = 2f; // Height of the jump
         public float gravity = 9.81f; // Gravity strength
 
-        private Vector3 targetPosition;
-
         private Vector3 velocity; // Stores vertical movement
 
         public bool IsJumping { get; private set; }
@@ -20,55 +19,26 @@ namespace Player
         public bool IsSliding { get; private set; }
         public float slideDuration = 1f; // How long the slide lasts
         public float slideSpeedMultiplier = 1.5f; // Slide speed boost
-
-        // Reference vectors for movement
-        private Vector3 forwardDirection;
-        private Vector3 rightDirection;
-
-        // Lane handler integration
-        private PlayerLaneHandler laneHandler;
-        private PlayerTurnHandler turnHandler;
-        private Vector3 lateralMovement = Vector3.zero;
+        private Vector3 _lateralMovement = Vector3.zero;
 
         private void Start()
         {
-            // Set initial target position
-            targetPosition = transform.position;
-
-            // Get lane handler
-            laneHandler = GetComponent<PlayerLaneHandler>();
-            if (laneHandler == null) laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
-
-            // Get turn handler
-            turnHandler = GetComponent<PlayerTurnHandler>();
-            if (turnHandler == null) turnHandler = gameObject.AddComponent<PlayerTurnHandler>();
-
             // Subscribe to lane movement events
-            laneHandler.OnLaneMovement += ApplyLateralMovement;
-
-            // Initialize direction vectors
-            forwardDirection = transform.forward;
-            rightDirection = transform.right;
+            GetComponent<PlayerLaneHandler>().OnLaneMovement += ApplyLateralMovement;
         }
 
         private void ApplyLateralMovement(Vector3 movement)
         {
-            lateralMovement = movement;
+            _lateralMovement = movement;
         }
 
         private void OnDestroy()
-        {
-            // Unsubscribe from events
-            if (laneHandler != null)
-                laneHandler.OnLaneMovement -= ApplyLateralMovement;
+        { 
+            GetComponent<PlayerLaneHandler>().OnLaneMovement -= ApplyLateralMovement;
         }
 
         private void Update()
         {
-            // Update direction vectors in case they've changed due to turns
-            forwardDirection = transform.forward;
-            rightDirection = transform.right;
-
             HandleJump();
             HandleSlide();
             MovePlayer();
@@ -89,7 +59,7 @@ namespace Player
 
                 if (Input.GetKeyDown(KeyCode.Space) && !IsSliding) // Jump on space press
                 {
-                    velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump force
+                    velocity.y = Mathf.Sqrt(jumpHeight * 2 * gravity); // Jump to force
                     IsJumping = true;
 
                     if (animator != null && HasParameter("Jump", animator))
@@ -117,7 +87,7 @@ namespace Player
             movementSpeed *= slideSpeedMultiplier;
 
             // Trigger slide animation if available
-            if (animator != null && HasParameter("Slide", animator)) animator.SetTrigger("Slide");
+            animator.SetTrigger("Slide");
 
             // Wait for slide duration
             yield return new WaitForSeconds(slideDuration);
@@ -141,7 +111,7 @@ namespace Player
                 movement.z = Mathf.Sign(transform.forward.z) * movementSpeed * Time.deltaTime;
 
                 // Apply lane movement from lane handler if present
-                if (lateralMovement != Vector3.zero) movement.x = lateralMovement.x;
+                if (_lateralMovement != Vector3.zero) movement.x = _lateralMovement.x;
             }
             else
             {
@@ -149,11 +119,11 @@ namespace Player
                 movement.x = Mathf.Sign(transform.forward.x) * movementSpeed * Time.deltaTime;
 
                 // Apply lane movement from lane handler if present
-                if (lateralMovement != Vector3.zero) movement.z = lateralMovement.z;
+                if (_lateralMovement != Vector3.zero) movement.z = _lateralMovement.z;
             }
 
             // Reset lateral movement after applied
-            lateralMovement = Vector3.zero;
+            _lateralMovement = Vector3.zero;
 
             // Apply vertical movement
             movement.y = velocity.y * Time.deltaTime;
@@ -162,7 +132,7 @@ namespace Player
             controller.Move(movement);
 
             // Update animator speed
-            if (animator != null) animator.SetFloat("MovementSpeed", movementSpeed);
+             animator.SetFloat("MovementSpeed", movementSpeed);
         }
 
         private bool isTurning()

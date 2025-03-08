@@ -11,8 +11,8 @@ namespace Player
         public float laneChangeSpeed = 3f;
         public float leanAngle = 15f;
 
-        private bool isChangingLane = false;
-        private float laneChangeProgress = 0f;
+        private bool isChangingLane;
+        private float laneChangeProgress;
         private Vector3 targetLanePosition;
         private Vector3 startPosition;
         private Quaternion startRotation;
