@@ -7,20 +7,19 @@ public class Zombie : MonoBehaviour
 {
     public Transform player;
     public float followDistance;
+
     private NavMeshAgent agent;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float distance = Vector3.Distance(player.position, transform.position);
-        if (distance <= followDistance)
-        {
-            agent.SetDestination(player.position);
-        }
+        var distance = Vector3.Distance(player.position, transform.position);
+        if (distance <= followDistance) agent.SetDestination(player.position);
     }
 }
