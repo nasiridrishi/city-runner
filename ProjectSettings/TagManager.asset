@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - coin
   - TurnPoint
+  - Wall
+  - Spell
   layers:
   - Default
   - TransparentFX

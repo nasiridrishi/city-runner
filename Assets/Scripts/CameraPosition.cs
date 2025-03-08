@@ -22,7 +22,7 @@ namespace Player
             transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
 
             // Make camera look at player's head
-            var lookTarget = player.transform.position + new Vector3(0, 1.0f, 0);
+            var lookTarget = player.transform.position + new Vector3(0, 2.0f, 0);
             transform.LookAt(lookTarget);
         }
     }

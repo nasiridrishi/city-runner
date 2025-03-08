@@ -4,6 +4,5 @@ namespace obstacle
 {
     public class ObstacleHandler : MonoBehaviour
     {
-        
     }
 }

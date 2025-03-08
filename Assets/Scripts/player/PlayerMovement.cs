@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using obstacle.type;
 using UnityEngine;
 
 namespace Player
@@ -21,6 +23,8 @@ namespace Player
         public float slideSpeedMultiplier = 1.5f; // Slide speed boost
         private Vector3 _lateralMovement = Vector3.zero;
 
+        public bool IsDead { get; set; }
+
         private void Start()
         {
             // Subscribe to lane movement events
@@ -33,12 +37,13 @@ namespace Player
         }
 
         private void OnDestroy()
-        { 
+        {
             GetComponent<PlayerLaneHandler>().OnLaneMovement -= ApplyLateralMovement;
         }
 
         private void Update()
         {
+            if (IsDead) return;
             HandleJump();
             HandleSlide();
             MovePlayer();
@@ -132,8 +137,35 @@ namespace Player
             controller.Move(movement);
 
             // Update animator speed
-             animator.SetFloat("MovementSpeed", movementSpeed);
+            animator.SetFloat("MovementSpeed", movementSpeed);
         }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+
+            // Check if we hit a wall that hasn't been broken
+            if (hit.gameObject.CompareTag("Wall"))
+            {
+                var wall = hit.gameObject.GetComponent<ObstacleWall>();
+
+                // Only die if the wall is still intact (has active collider)
+                if (wall != null && wall.IsIntact())
+                {
+
+                    // Set player to dead state
+                    IsDead = true;
+
+                    // Stop movement
+                    movementSpeed = 0;
+                    velocity = Vector3.zero;
+
+                    // Trigger death animation
+                    if (animator != null)
+                        animator.SetTrigger("Death");
+                }
+            }
+        }
+
 
         private bool isTurning()
         {
