@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Player
 {
     [RequireComponent(typeof(PlayerLaneHandler))]
+    [RequireComponent(typeof(PlayerLifeManager))]
     public class Player : MonoBehaviour
     {
         public Animator animator;
@@ -14,7 +15,11 @@ namespace Player
         public float jumpHeight = 2f; // Height of the jump
         public float gravity = 9.81f; // Gravity strength
 
+        [Header("Default Settings")]
+        [SerializeField] private float defaultMovementSpeed = 5f; // Store default speed for reset after death
+
         private Vector3 velocity; // Stores vertical movement
+        private PlayerLifeManager lifeManager; // Reference to the life manager
 
         public bool IsJumping { get; private set; }
 
@@ -29,6 +34,15 @@ namespace Player
         {
             // Subscribe to lane movement events
             GetComponent<PlayerLaneHandler>().OnLaneMovement += ApplyLateralMovement;
+            
+            // Get reference to the life manager
+            lifeManager = GetComponent<PlayerLifeManager>();
+            
+            // Store default speed
+            defaultMovementSpeed = movementSpeed;
+            
+            // Set initial state
+            IsDead = false;
         }
 
         private void ApplyLateralMovement(Vector3 movement)
@@ -38,12 +52,25 @@ namespace Player
 
         private void OnDestroy()
         {
-            GetComponent<PlayerLaneHandler>().OnLaneMovement -= ApplyLateralMovement;
+            // Make sure to unsubscribe to prevent memory leaks
+            var laneHandler = GetComponent<PlayerLaneHandler>();
+            if (laneHandler != null)
+                laneHandler.OnLaneMovement -= ApplyLateralMovement;
         }
 
         private void Update()
         {
-            if (IsDead) return;
+            if (IsDead)
+            {
+                // Check if we just died this frame - only call HandlePlayerDeath once
+                if (lifeManager != null && velocity.y > -0.1f) // Small threshold to avoid calling multiple times
+                {
+                    lifeManager.HandlePlayerDeath();
+                    velocity.y = -0.1f; // Mark as processed
+                }
+                return;
+            }
+            
             HandleJump();
             HandleSlide();
             MovePlayer();
@@ -139,45 +166,95 @@ namespace Player
             controller.Move(movement);
 
             // Update animator speed
-            animator.SetFloat("MovementSpeed", movementSpeed);
+            if (animator != null)
+                animator.SetFloat("MovementSpeed", movementSpeed);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Fire"))
+            if (other.gameObject.CompareTag("Fire") && !IsDead)
             {
-                IsDead = true;
-                movementSpeed = 0;
-                animator.SetTrigger("Death");
+                Die();
             }
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-
             // Check if we hit a wall that hasn't been broken
-            if (hit.gameObject.CompareTag("Wall"))
+            if (hit.gameObject.CompareTag("Wall") && !IsDead)
             {
                 var wall = hit.gameObject.GetComponent<ObstacleWall>();
 
                 // Only die if the wall is still intact (has active collider)
                 if (wall != null && wall.IsIntact())
                 {
-
-                    // Set player to dead state
-                    IsDead = true;
-
-                    // Stop movement
-                    movementSpeed = 0;
-                    velocity = Vector3.zero;
-
-                    // Trigger death animation
-                    if (animator != null)
-                        animator.SetTrigger("Death");
+                    Die();
                 }
             }
         }
+        
+        // New method to centralize death logic
+        private void Die()
+        {
+            // Set player to dead state
+            IsDead = true;
 
+            // Stop movement
+            movementSpeed = 0;
+            velocity = Vector3.zero;
+
+            // Trigger death animation
+            if (animator != null && HasParameter("Death", animator))
+                animator.SetTrigger("Death");
+                
+            // Play death sound
+            soundDeath();
+        }
+
+        // Original method for backward compatibility
+        public void ResetPlayerState()
+        {
+            IsDead = false;
+            IsJumping = false;
+            IsSliding = false;
+            movementSpeed = defaultMovementSpeed;
+            velocity = Vector3.zero;
+            
+            // Reset animations
+            if (animator != null)
+            {
+                animator.ResetTrigger("Death");
+                animator.ResetTrigger("Jump");
+                animator.ResetTrigger("Slide");
+                animator.Play("Idle");
+            }
+        }
+
+        // New method with position and rotation parameters
+        public void ResetPlayerState(Vector3 respawnPos, Quaternion respawnRot)
+        {
+            IsDead = false;
+            IsJumping = false;
+            IsSliding = false;
+            movementSpeed = defaultMovementSpeed;
+            velocity = Vector3.zero;
+            
+            // Reset animations
+            if (animator != null)
+            {
+                animator.ResetTrigger("Death");
+                animator.ResetTrigger("Jump");
+                animator.ResetTrigger("Slide");
+                animator.Play("Idle");
+            }
+            
+            // Reset position and rotation
+            // Important: We need to temporarily disable the controller to teleport
+            controller.enabled = false;
+            transform.position = respawnPos;
+            transform.rotation = respawnRot;
+            controller.enabled = true;
+        }
 
         private bool isTurning()
         {
@@ -187,6 +264,8 @@ namespace Player
         // Helper method to check if an animator has a parameter
         private bool HasParameter(string paramName, Animator animator)
         {
+            if (animator == null) return false;
+            
             foreach (var param in animator.parameters)
                 if (param.name == paramName)
                     return true;
