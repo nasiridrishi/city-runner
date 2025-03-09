@@ -99502,18 +99502,16 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.25
-    functionName: footstepSound
+    functionName: soundFootstep1
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 901a322ef4881624e89930d4a3dccd46,
-      type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.6
-    functionName: footstepSound
+    functionName: soundFootstep2
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 901a322ef4881624e89930d4a3dccd46,
-      type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
