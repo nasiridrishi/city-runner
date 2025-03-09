@@ -91,7 +91,9 @@ namespace Player
             var originalSpeed = movementSpeed;
             movementSpeed *= slideSpeedMultiplier;
 
-            // Trigger slide animation if available
+            // Sound play Workaround, for some reason slide event is not triggered,
+            //todo investigate why
+            SoundManager.instance.soundRollForward();
             animator.SetTrigger("Slide");
 
             // Wait for slide duration
