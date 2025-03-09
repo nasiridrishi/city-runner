@@ -193,5 +193,58 @@ namespace Player
 
             return false;
         }
+        
+        //for the shake of animation events since they can't access
+        //the sound manager directly
+        public void soundCoinCollect()
+        {
+            SoundManager.instance.soundCoinCollect();
+        }
+    
+        public void soundJump()
+        {
+            SoundManager.instance.soundJump();
+        }
+    
+        public void soundLand()
+        {
+            SoundManager.instance.soundLand();
+        }
+    
+        public void soundRollForward()
+        {
+            Debug.Log("Rolling forward sound");
+            SoundManager.instance.soundRollForward();
+        }
+    
+        public void soundLaneChange()
+        {
+            SoundManager.instance.soundLaneChange();
+        }
+    
+        public void soundFootstep1()
+        {
+            SoundManager.instance.soundFootstep1();
+        }
+    
+        public void soundFootstep2()
+        {
+            SoundManager.instance.soundFootstep2();
+        }
+    
+        public void soundCastMagic()
+        {
+            SoundManager.instance.soundCastMagic();
+        }
+    
+        public void soundBlast()
+        {
+            // TODO: Implement blast sound
+        }
+
+        public void soundDeath()
+        {
+           SoundManager.instance.soundDeath();
+        }
     }
 }
