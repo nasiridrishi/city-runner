@@ -4,12 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance
-    {
-        get;
-        private set;
-    }
+    public static SoundManager instance { get; private set; }
 
+    [Header("Sound Effects")]
     [SerializeField] private AudioClip coinCollect;
     [SerializeField] private AudioClip jump;
     [SerializeField] private AudioClip land;
@@ -20,66 +17,101 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip castMagic;
     [SerializeField] private AudioClip death;
     
-    private AudioSource audioSource;
+    [Header("Background Music")]
+    [SerializeField] private AudioClip backgroundMusic;
+
+    [Range(0.0f, 1.0f)]
+    [SerializeField] private float backgroundMusicVolume = 0.2f;
+
+    private AudioSource effectSource;
+    private AudioSource musicSource;
 
     private void Awake()
     {
+        // Singleton pattern check
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Initialize the AudioSources
+        effectSource = GetComponent<AudioSource>();
+
+        // Create a new AudioSource for background music.
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.clip = backgroundMusic;
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.volume = backgroundMusicVolume;
     }
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        // Start playing the background music.
+        if (backgroundMusic != null)
+        {
+            musicSource.Play();
+        }
     }
 
+    private void Update()
+    {
+        // Update the volume continuously in case backgroundMusicVolume changes
+        musicSource.volume = backgroundMusicVolume;
+    }
+
+    // Sound Effect Methods
     public void soundCoinCollect()
     {
-        audioSource.PlayOneShot(coinCollect);
+        effectSource.PlayOneShot(coinCollect);
     }
     
     public void soundJump()
     {
-        audioSource.PlayOneShot(jump);
+        effectSource.PlayOneShot(jump);
     }
     
     public void soundLand()
     {
-       audioSource.PlayOneShot(land);
+        effectSource.PlayOneShot(land);
     }
     
     public void soundRollForward()
     {
         Debug.Log("Rolling forward sound");
-        audioSource.PlayOneShot(rollForward);
+        effectSource.PlayOneShot(rollForward);
     }
     
     public void soundLaneChange()
     {
-        audioSource.PlayOneShot(laneChange);
+        effectSource.PlayOneShot(laneChange);
     }
     
     public void soundFootstep1()
     {
-        audioSource.PlayOneShot(footstep1);
+        effectSource.PlayOneShot(footstep1);
     }
     
     public void soundFootstep2()
     {
-        audioSource.PlayOneShot(footstep2);
+        effectSource.PlayOneShot(footstep2);
     }
     
     public void soundCastMagic()
     {
-       audioSource.PlayOneShot(castMagic);
+        effectSource.PlayOneShot(castMagic);
     }
     
     public void soundBlast()
     {
-        //todo PlaySound(SoundType.BLAST);
+        // TODO: Implement blast sound
     }
 
     public void soundDeath()
     {
-        audioSource.PlayOneShot(death);
+        effectSource.PlayOneShot(death);
     }
 }
