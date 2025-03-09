@@ -70,6 +70,7 @@ namespace Player
             // Trigger animation if available
             var animator = GetComponent<Animator>();
             if (animator != null && HasParameter("LaneChange", animator)) animator.SetTrigger("LaneChange");
+            SoundManager.instance.soundLaneChange();
         }
 
         private void CalculateTargetLanePosition()
