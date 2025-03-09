@@ -101,5 +101,9 @@ namespace coin
             
             spawnedCoins.Clear();
         }
+        public List<GameObject> GetSpawnedCoins()
+        {
+            return spawnedCoins;
+        }
     }
 }
