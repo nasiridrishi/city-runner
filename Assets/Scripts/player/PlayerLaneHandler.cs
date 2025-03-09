@@ -11,8 +11,8 @@ namespace Player
         public float laneChangeSpeed = 3f;
         public float leanAngle = 15f;
 
-        private bool isChangingLane = false;
-        private float laneChangeProgress = 0f;
+        private bool isChangingLane;
+        private float laneChangeProgress;
         private Vector3 targetLanePosition;
         private Vector3 startPosition;
         private Quaternion startRotation;
@@ -143,9 +143,9 @@ namespace Player
 
         private bool canChangeLane()
         {
-            var isSliding = GetComponent<PlayerMovement>().IsSliding;
-            var isJumping = GetComponent<PlayerMovement>().IsJumping;
-            return !isChangingLane && !isTurning() && !isSliding && !isJumping;
+            var isSliding = GetComponent<Player>().IsSliding;
+            var isJumping = GetComponent<Player>().IsJumping;
+            return !isChangingLane && !IsTurning() && !isSliding && !isJumping;
         }
 
         // Helper methods
@@ -162,7 +162,7 @@ namespace Player
             return -(Mathf.Cos(Mathf.PI * x) - 1) / 2;
         }
 
-        private bool isTurning()
+        private bool IsTurning()
         {
             return GetComponent<PlayerTurnHandler>().IsTurning;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,24 @@ namespace coin
         // Update is called once per frame
         private void Update()
         {
-            transform.Rotate(0, 0, 2);
+            //noop
         }
+
+        // private void OnCollisionEnter(Collision other)
+        // {
+        //     Debug.Log("Collision detected");
+        //     //if is player
+        //     if (other.gameObject.CompareTag("Player"))
+        //     {
+        //         //get the player script
+        //         var player = other.gameObject.GetComponent<Player.Player>();
+        //         //increment the score
+        //         player.score++;
+        //         //update the UI
+        //         player.ui.text = "Score: " + player.score;
+        //         //destroy the coin
+        //         Destroy(gameObject);
+        //     }
+        // }
     }
 }

@@ -6,9 +6,6 @@ namespace Player
 {
     public class PlayerTurnHandler : MonoBehaviour
     {
-        //singleton
-        public static PlayerTurnHandler Instance { get; private set; }
-
         public float turnDetectionRadius = 1f;
         public float turnCooldown = 0.5f;
 
@@ -20,17 +17,10 @@ namespace Player
         public bool IsTurning { get; private set; }
 
         private float cooldownTimer = 0f;
-        private PlayerLaneHandler laneHandler;
 
         private void Start()
         {
-            // Singleton pattern
-            if (Instance == null) Instance = this;
-            laneHandler = GetComponent<PlayerLaneHandler>();
-            if (laneHandler == null)
-                laneHandler = gameObject.AddComponent<PlayerLaneHandler>();
-            else
-                Debug.LogWarning("PlayerTurnHandler requires a PlayerLaneHandler component on the same GameObject.");
+            //noop
         }
 
         private void Update()
@@ -56,7 +46,7 @@ namespace Player
 
             foreach (var hit in hits)
             {
-                var turnPoint = hit.collider.GetComponent<PlayerTurnPoint>();
+                var turnPoint = hit.collider.GetComponent<RoadTurnPoint>();
                 if (turnPoint != null && cooldownTimer <= 0)
                 {
                     PerformTurn(turnPoint);
@@ -65,16 +55,16 @@ namespace Player
             }
         }
 
-        private void PerformTurn(PlayerTurnPoint turnPoint)
+        private void PerformTurn(RoadTurnPoint turnPoint)
         {
-            var yRotation = turnPoint.direction == PlayerTurnPoint.TurnDirection.Left
+            var yRotation = turnPoint.direction == RoadTurnPoint.TurnDirection.Left
                 ? -turnPoint.turnAngle
                 : turnPoint.turnAngle;
 
             StartCoroutine(SmoothTurn(yRotation));
 
             // Notify lane handler about turn
-            laneHandler.ResetLaneOnTurn();
+            GetComponent<PlayerLaneHandler>().ResetLaneOnTurn();
 
             // Set cooldown timer
             cooldownTimer = turnCooldown;
