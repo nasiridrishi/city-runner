@@ -1,0 +1,393 @@
+13d2433 | Nasir Idrishi | 15 minutes ago | update root order values for various prefab instances in Main Scene
+4169784 | Nasir Idrishi | 19 minutes ago | add coin model, material, animation, and prefab; set up initial properties and configurations
+1028d66 | Nasir Idrishi | 20 minutes ago | refactor Player, Coin, and CoinSpawner for improved collision detection and spawning logic; add debug logging and streamline variable usage
+b256a05 | Nasir Idrishi | 2 hours ago | Merge pull request #26 from nasiridrishi/rfc
+c3102ef | Nasir Idrishi | 2 hours ago | refactor various scripts to improve code readability and maintainability; change method access modifiers to private and streamline variable declarations
+7669ecd | Nasir Idrishi | 3 hours ago | Merge pull request #25 from nasiridrishi/movement-fixes
+e301ab3 | Nasir Idrishi | 3 hours ago | refactor PlayerLaneHandler and PlayerMovement for improved lane change logic; add checks for jumping and sliding states
+2f32d0c | Nasir Idrishi | 3 hours ago | Merge pull request #24 from nasiridrishi/refactor-dirs
+4296a3a | Nasir Idrishi | 3 hours ago | Move all imported assets to its own "External Directory"
+a642270 | Nasir Idrishi | 3 hours ago | On coin-system: !!GitHub_Desktop<coin-system>
+0a62ed6 | Nasir Idrishi | 3 hours ago | index on coin-system: 9b1850d refactor CoinSpawner for improved coin spawning logic; implement turn detection and enhance coin spawning dynamics
+adeee7a | Nasir Idrishi | 3 hours ago | Merge pull request #23 from nasiridrishi/coin-system
+9b1850d | Nasir Idrishi | 13 hours ago | refactor CoinSpawner for improved coin spawning logic; implement turn detection and enhance coin spawning dynamics
+8685d19 | Nasir Idrishi | 19 hours ago | refactor turn points naming for clarity; add new coin spawner settings for improved gameplay dynamics
+172f57e | Nasir Idrishi | 19 hours ago | refactor CoinSpawner to improve coin spawning logic and player turn handling; enhance debug logging for better tracking
+b3364d4 | Nasir Idrishi | 23 hours ago | add coin prefab and spawner logic for dynamic coin generation; implement lane tracking and cleanup
+82d0d1b | Nasir Idrishi | 25 hours ago | refactor CoinSpawner and player classes for improved readability and functionality; add debug logs for better tracking
+36cb7f7 | Nasir Idrishi | 29 hours ago | add new terrain layers and materials for enhanced environment detail
+8bafc0f | Nasir Idrishi | 29 hours ago | fix object positioning in main scene for improved alignment
+52c00cd | Nasir Idrishi | 2 days ago | add coin spawning system and player turn handling for dynamic gameplay
+812e268 | Nasir Idrishi | 2 days ago | Merge pull request #22 from nasiridrishi/player-path
+c4d20b6 | Nasir Idrishi | 2 days ago | Merge pull request #21 from nasiridrishi/Adjust-Player-Turn
+e5fe585 | Mingze | 2 days ago | Implement smooth turn logic
+3e25019 | Nasir Idrishi | 2 days ago | fix player movement and lane handling logic for correct lane transitions and handle endless player running across the city
+27c148b | Nasir Idrishi | 3 days ago | add player movement, lane handling, and camera follow scripts
+8595c4f | Nasir Idrishi | 3 days ago | Merge pull request #20 from nasiridrishi/road-barriers
+90b346f | Nasir Idrishi | 3 days ago | add road barriers
+c82e317 | Nasir Idrishi | 3 days ago | Merge pull request #19 from nasiridrishi/Restructure-Assets
+031fc45 | Nasir Idrishi | 3 days ago | Merge branch 'extended-road' into Restructure-Game
+f11b1dd | Nasir Idrishi | 3 days ago | Add CameraPosition script to follow player movement
+9c5f638 | Nasir Idrishi | 4 days ago | Revert "Merge branch 'main' into Restructure-Game"
+3b9d57c | Nasir Idrishi | 4 days ago | Merge branch 'Restructure-Game' into extended-road
+e645041 | Nasir Idrishi | 4 days ago | Merge branch 'main' into Restructure-Game
+6b13753 | Dylan Loke | 4 days ago | add square road
+e3cabeb | Mingze | 4 days ago | Fixed Animator Controller
+5688710 | Mingze | 4 days ago | Added sliding control
+a15ea4f | Mingze | 4 days ago | Add jump control
+ae36295 | Mingze | 4 days ago | Add jumping feature
+cf871d4 | Nasir Idrishi | 4 days ago | Revert "Refactor player movement to enhance lane change mechanics and reset animation states"
+500c181 | Nasir Idrishi | 5 days ago | Refactor player movement to enhance lane change mechanics and reset animation states
+d544d12 | Nasir Idrishi | 5 days ago | Refactor player movement to include lane changing mechanics and adjust movement speed
+b987af0 | Eng Ming Ze | 6 days ago | Merge pull request #16 from nasiridrishi/Player-Death-System
+13f202b | Mingze | 6 days ago | Change character look
+648afe3 | Mingze | 6 days ago | Added player death and invulnerability mechanism.
+1e742ab | Eng Ming Ze | 6 days ago | Merge pull request #15 from nasiridrishi/Fix-Camera-View
+f4d1d77 | Mingze | 6 days ago | Player across obstacles will turn obstacles into transparent to show things behind it.
+b7e0854 | Nasir Idrishi | 7 days ago | Merge branch 'main' into Restructure-Game
+efc8573 | Nasir Idrishi | 7 days ago | Remove useless barriers and make vehicles move and add coins
+e9e9f70 | Mingze | 8 days ago | Changed to use Cinemahine to do camera view
+71d8645 | Eng Ming Ze | 8 days ago | Merge pull request #14 from nasiridrishi/Fix-Player-Movement
+392f947 | Mingze | 8 days ago | Removed testing obstacles
+506a6c6 | Mingze | 8 days ago | PlayerMovement - Added gravity to fix player go up after collision.
+b026221 | Loke Zhi Chun | 12 days ago | Merge pull request #13 from nasiridrishi/fix-collision-second-time
+f95ba37 | Dylan Loke | 12 days ago | fix missing collision missing after merging
+45b7535 | Ooi Yan Hong | 12 days ago | Merge pull request #12 from nasiridrishi/Menu
+63ba6df | Ooi Yan Hong | 12 days ago | FIX THE CHARACTOR CANNOT MOVE
+9207066 | Ooi Yan Hong | 12 days ago | Merge pull request #11 from nasiridrishi/Menu
+7322c16 | Ooi Yan Hong | 12 days ago | PAUSE MENU
+7ead513 | Nasir Idrishi | 13 days ago | Merge pull request #10 from nasiridrishi/Menu
+79fd8e0 | Nasir Idrishi | 13 days ago | Merge branch 'main' into Menu
+4616cd3 | Nasir Idrishi | 13 days ago | update
+38c9210 | Nasir Idrishi | 13 days ago | Merge pull request #9 from nasiridrishi/Menu
+f4cd031 | Nasir Idrishi | 13 days ago | Merge branch 'main' into Menu
+e55c927 | Ooi Yan Hong | 2 weeks ago | Start menu for Quit button and Start button
+b27ca27 | Nasir Idrishi | 2 weeks ago | Merge pull request #8 from nasiridrishi/Adjust-Game-Based-on-Feedback
+fb88542 | Nasir Idrishi | 2 weeks ago | Merge branch 'main' into Adjust-Game-Based-on-Feedback
+af2626b | Nasir Idrishi | 2 weeks ago | adjust obstacles
+007d3ed | Nasir Idrishi | 2 weeks ago | Merge pull request #4 from nasiridrishi/collision-bug-fixes
+c85c37b | Ooi Yan Hong | 3 weeks ago | Merge pull request #7 from nasiridrishi/Menu
+c379f8d | Ooi Yan Hong | 3 weeks ago | delete game scene
+a324013 | Nasir Idrishi | 3 weeks ago | Create README.md
+7a118cb | Dylan Loke | 3 weeks ago | add box collision at the end of the level
+7ae4d4f | Dylan Loke | 4 weeks ago | modiffied running animation character for footstep sound, add sound manager for background music and footstep
+bb376f6 | Dylan Loke | 4 weeks ago | add background music assets
+61367e5 | Dylan Loke | 4 weeks ago | add sounds assets for footstep, grunt and hit.
+fd8b35c | Dylan Loke | 4 weeks ago | add footstep sound script
+4980ea1 | Dylan Loke | 5 weeks ago | fixed box collision of cars and out-linear world
+fa4823a | Nasir Idrishi | 5 weeks ago | Revert "Update Main Scene.unity"
+f3e088b | Nasir Idrishi | 5 weeks ago | Update Main Scene.unity
+8a72438 | Nasir Idrishi | 5 weeks ago | Merge pull request #3 from nasiridrishi/assets-environment
+9a56e8f | Nasir Idrishi | 5 weeks ago | s main scene and rename dylans main scene 2 to main scene
+9b70688 | Nasir Idrishi | 5 weeks ago | Make adjustments so it's ready to me merged
+c66424a | Nasir Idrishi | 5 weeks ago | Merge branch 'main' into assets-environment
+c68fd7d | Nasir Idrishi | 5 weeks ago | Update .gitignore
+e259e03 | Dylan Loke | 5 weeks ago | change direction of the map
+3e30f9c | Dylan Loke | 6 weeks ago | Attempt to fix merge conflict
+3547e17 | Nasir Idrishi | 6 weeks ago | Merge pull request #2 from nasiridrishi/Player-Movement-and-Camera-Settings
+ea14874 | YanHong | 6 weeks ago | Implement coin collection system with score
+aa1702b | Dylan Loke | 6 weeks ago | desgined stright-line map, importing building, props and vehicle
+804b8ba | Mingze | 6 weeks ago | Done player movement (WASD), camera follow character and import assets and animation.
+b77d699 | Nasir Idrishi | 6 weeks ago | Merge pull request #1 from Mingze8/Player-Movement-+-Camera-Settings
+25f7f45 | Mingze | 6 weeks ago | PlayerMovement+CameraSettings
+82f6bbf | Nasir Idrishi | 7 weeks ago | Basic game level/terrain
+7901a99 | Nasir Idrishi | 7 weeks ago | Update .gitignore to exclude .idea folder
+552500f | Nasir Idrishi | 7 weeks ago | initial commit
+cc3224e | Nasir Idrishi | 3 months ago | Initial commit
+                   SSUUMMMMAARRYY OOFF LLEESSSS CCOOMMMMAANNDDSS
+
+      Commands marked with * may be preceded by a number, _N.
+      Notes in parentheses indicate the behavior if _N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MMOOVVIINNGG
+
+  e  ^E  j  ^N  CR  *  Forward  one line   (or _N lines).
+  y  ^Y  k  ^K  ^P  *  Backward one line   (or _N lines).
+  f  ^F  ^V  SPACE  *  Forward  one window (or _N lines).
+  b  ^B  ESC-v      *  Backward one window (or _N lines).
+  z                 *  Forward  one window (and set window to _N).
+  w                 *  Backward one window (and set window to _N).
+  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+  d  ^D             *  Forward  one half-window (and set half-window to _N).
+  u  ^U             *  Backward one half-window (and set half-window to _N).
+  ESC-)  RightArrow *  Right one half screen width (or _N positions).
+  ESC-(  LeftArrow  *  Left  one half screen width (or _N positions).
+  ESC-}  ^RightArrow   Right to last column displayed.
+  ESC-{  ^LeftArrow    Left  to first column.
+  F                    Forward forever; like "tail -f".
+  ESC-F                Like F but stop when search pattern is found.
+  r  ^R  ^L            Repaint screen.
+  R                    Repaint screen, discarding buffered input.
+        ---------------------------------------------------
+        Default "window" is the screen height.
+        Default "half-window" is half of the screen height.
+ ---------------------------------------------------------------------------
+
+                          SSEEAARRCCHHIINNGG
+
+  /_p_a_t_t_e_r_n          *  Search forward for (_N-th) matching line.
+  ?_p_a_t_t_e_r_n          *  Search backward for (_N-th) matching line.
+  n                 *  Repeat previous search (for _N-th occurrence).
+  N                 *  Repeat previous search in reverse direction.
+  ESC-n             *  Repeat previous search, spanning files.
+  ESC-N             *  Repeat previous search, reverse dir. & spanning files.
+  ESC-u                Undo (toggle) search highlighting.
+  ESC-U                Clear search highlighting.
+  &_p_a_t_t_e_r_n          *  Display only matching lines.
+        ---------------------------------------------------
+        A search pattern may begin with one or more of:
+        ^N or !  Search for NON-matching lines.
+        ^E or *  Search multiple files (pass thru END OF FILE).
+        ^F or @  Start search at FIRST file (for /) or last file (for ?).
+        ^K       Highlight matches, but don't move (KEEP position).
+        ^R       Don't use REGULAR EXPRESSIONS.
+        ^S _n     Search for match in _n-th parenthesized subpattern.
+        ^W       WRAP search if no match found.
+ ---------------------------------------------------------------------------
+
+                           JJUUMMPPIINNGG
+
+  g  <  ESC-<       *  Go to first line in file (or line _N).
+  G  >  ESC->       *  Go to last line in file (or line _N).
+  p  %              *  Go to beginning of file (or _N percent into file).
+  t                 *  Go to the (_N-th) next tag.
+  T                 *  Go to the (_N-th) previous tag.
+  {  (  [           *  Find close bracket } ) ].
+  }  )  ]           *  Find open bracket { ( [.
+  ESC-^F _<_c_1_> _<_c_2_>  *  Find close bracket _<_c_2_>.
+  ESC-^B _<_c_1_> _<_c_2_>  *  Find open bracket _<_c_1_>.
+        ---------------------------------------------------
+        Each "find close bracket" command goes forward to the close bracket 
+          matching the (_N-th) open bracket in the top line.
+        Each "find open bracket" command goes backward to the open bracket 
+          matching the (_N-th) close bracket in the bottom line.
+
+  m_<_l_e_t_t_e_r_>            Mark the current top line with <letter>.
+  M_<_l_e_t_t_e_r_>            Mark the current bottom line with <letter>.
+  '_<_l_e_t_t_e_r_>            Go to a previously marked position.
+  ''                   Go to the previous position.
+  ^X^X                 Same as '.
+  ESC-m_<_l_e_t_t_e_r_>        Clear a mark.
+        ---------------------------------------------------
+        A mark is any upper-case or lower-case letter.
+        Certain marks are predefined:
+             ^  means  beginning of the file
+             $  means  end of the file
+ ---------------------------------------------------------------------------
+
+                        CCHHAANNGGIINNGG FFIILLEESS
+
+  :e [_f_i_l_e]            Examine a new file.
+  ^X^V                 Same as :e.
+  :n                *  Examine the (_N-th) next file from the command line.
+  :p                *  Examine the (_N-th) previous file from the command line.
+  :x                *  Examine the first (or _N-th) file from the command line.
+  :d                   Delete the current file from the command line list.
+  =  ^G  :f            Print current file name.
+ ---------------------------------------------------------------------------
+
+                    MMIISSCCEELLLLAANNEEOOUUSS CCOOMMMMAANNDDSS
+
+  -_<_f_l_a_g_>              Toggle a command line option [see OPTIONS below].
+  --_<_n_a_m_e_>             Toggle a command line option, by name.
+  __<_f_l_a_g_>              Display the setting of a command line option.
+  ___<_n_a_m_e_>             Display the setting of an option, by name.
+  +_c_m_d                 Execute the less cmd each time a new file is examined.
+
+  !_c_o_m_m_a_n_d             Execute the shell command with $SHELL.
+  #_c_o_m_m_a_n_d             Execute the shell command, expanded like a prompt.
+  |XX_c_o_m_m_a_n_d            Pipe file between current pos & mark XX to shell command.
+  s _f_i_l_e               Save input to a file.
+  v                    Edit the current file with $VISUAL or $EDITOR.
+  V                    Print version number of "less".
+ ---------------------------------------------------------------------------
+
+                           OOPPTTIIOONNSS
+
+        Most options may be changed either on the command line,
+        or from within less by using the - or -- command.
+        Options may be given in one of two forms: either a single
+        character preceded by a -, or a name preceded by --.
+
+  -?  ........  --help
+                  Display help (from command line).
+  -a  ........  --search-skip-screen
+                  Search skips current screen.
+  -A  ........  --SEARCH-SKIP-SCREEN
+                  Search starts just after target line.
+  -b [_N]  ....  --buffers=[_N]
+                  Number of buffers.
+  -B  ........  --auto-buffers
+                  Don't automatically allocate buffers for pipes.
+  -c  ........  --clear-screen
+                  Repaint by clearing rather than scrolling.
+  -d  ........  --dumb
+                  Dumb terminal.
+  -D xx_c_o_l_o_r  .  --color=xx_c_o_l_o_r
+                  Set screen colors.
+  -e  -E  ....  --quit-at-eof  --QUIT-AT-EOF
+                  Quit at end of file.
+  -f  ........  --force
+                  Force open non-regular files.
+  -F  ........  --quit-if-one-screen
+                  Quit if entire file fits on first screen.
+  -g  ........  --hilite-search
+                  Highlight only last match for searches.
+  -G  ........  --HILITE-SEARCH
+                  Don't highlight any matches for searches.
+  -h [_N]  ....  --max-back-scroll=[_N]
+                  Backward scroll limit.
+  -i  ........  --ignore-case
+                  Ignore case in searches that do not contain uppercase.
+  -I  ........  --IGNORE-CASE
+                  Ignore case in all searches.
+  -j [_N]  ....  --jump-target=[_N]
+                  Screen position of target lines.
+  -J  ........  --status-column
+                  Display a status column at left edge of screen.
+  -k [_f_i_l_e]  .  --lesskey-file=[_f_i_l_e]
+                  Use a lesskey file.
+  -K  ........  --quit-on-intr
+                  Exit less in response to ctrl-C.
+  -L  ........  --no-lessopen
+                  Ignore the LESSOPEN environment variable.
+  -m  -M  ....  --long-prompt  --LONG-PROMPT
+                  Set prompt style.
+  -n .........  --line-numbers
+                  Suppress line numbers in prompts and messages.
+  -N .........  --LINE-NUMBERS
+                  Display line number at start of each line.
+  -o [_f_i_l_e]  .  --log-file=[_f_i_l_e]
+                  Copy to log file (standard input only).
+  -O [_f_i_l_e]  .  --LOG-FILE=[_f_i_l_e]
+                  Copy to log file (unconditionally overwrite).
+  -p [_p_a_t_t_e_r_n]  --pattern=[_p_a_t_t_e_r_n]
+                  Start at pattern (from command line).
+  -P [_p_r_o_m_p_t]   --prompt=[_p_r_o_m_p_t]
+                  Define new prompt.
+  -q  -Q  ....  --quiet  --QUIET  --silent --SILENT
+                  Quiet the terminal bell.
+  -r  -R  ....  --raw-control-chars  --RAW-CONTROL-CHARS
+                  Output "raw" control characters.
+  -s  ........  --squeeze-blank-lines
+                  Squeeze multiple blank lines.
+  -S  ........  --chop-long-lines
+                  Chop (truncate) long lines rather than wrapping.
+  -t [_t_a_g]  ..  --tag=[_t_a_g]
+                  Find a tag.
+  -T [_t_a_g_s_f_i_l_e] --tag-file=[_t_a_g_s_f_i_l_e]
+                  Use an alternate tags file.
+  -u  -U  ....  --underline-special  --UNDERLINE-SPECIAL
+                  Change handling of backspaces, tabs and carriage returns.
+  -V  ........  --version
+                  Display the version number of "less".
+  -w  ........  --hilite-unread
+                  Highlight first new line after forward-screen.
+  -W  ........  --HILITE-UNREAD
+                  Highlight first new line after any forward movement.
+  -x [_N[,...]]  --tabs=[_N[,...]]
+                  Set tab stops.
+  -X  ........  --no-init
+                  Don't use termcap init/deinit strings.
+  -y [_N]  ....  --max-forw-scroll=[_N]
+                  Forward scroll limit.
+  -z [_N]  ....  --window=[_N]
+                  Set size of window.
+  -" [_c[_c]]  .  --quotes=[_c[_c]]
+                  Set shell quote characters.
+  -~  ........  --tilde
+                  Don't display tildes after end of file.
+  -# [_N]  ....  --shift=[_N]
+                  Set horizontal scroll amount (0 = one half screen width).
+                --exit-follow-on-close
+                  Exit F command on a pipe when writer closes pipe.
+                --file-size
+                  Automatically determine the size of the input file.
+                --follow-name
+                  The F command changes files if the input file is renamed.
+                --header=[_N[,_M]]
+                  Use N lines and M columns to display file headers.
+                --incsearch
+                  Search file as each pattern character is typed in.
+                --intr=_C
+                  Use _C instead of ^X to interrupt a read.
+                --line-num-width=_N
+                  Set the width of the -N line number field to _N characters.
+                --modelines=_N
+                  Read _N lines from the input file and look for vim modelines.
+                --mouse
+                  Enable mouse input.
+                --no-keypad
+                  Don't send termcap keypad init/deinit strings.
+                --no-histdups
+                  Remove duplicates from command history.
+                --no-number-headers
+                  Don't give line numbers to header lines.
+                --no-search-headers
+                  Don't search in header lines or columns.
+                --no-vbell
+                  Disable the terminal's visual bell.
+                --redraw-on-quit
+                  Redraw final screen when quitting.
+                --rscroll=_C
+                  Set the character used to mark truncated lines.
+                --save-marks
+                  Retain marks across invocations of less.
+                --search-options=[EFKNRW-]
+                  Set default options for every search.
+                --show-preproc-errors
+                  Display a message if preprocessor exits with an error status.
+                --proc-backspace
+                  Process backspaces for bold/underline.
+                --SPECIAL-BACKSPACE
+                  Treat backspaces as control characters.
+                --proc-return
+                  Delete carriage returns before newline.
+                --SPECIAL-RETURN
+                  Treat carriage returns as control characters.
+                --proc-tab
+                  Expand tabs to spaces.
+                --SPECIAL-TAB
+                  Treat tabs as control characters.
+                --status-col-width=_N
+                  Set the width of the -J status column to _N characters.
+                --status-line
+                  Highlight or color the entire line containing a mark.
+                --use-backslash
+                  Subsequent options use backslash as escape char.
+                --use-color
+                  Enables colored text.
+                --wheel-lines=_N
+                  Each click of the mouse wheel moves _N lines.
+                --wordwrap
+                  Wrap lines at spaces.
+
+
+ ---------------------------------------------------------------------------
+
+                          LLIINNEE EEDDIITTIINNGG
+
+        These keys can be used to edit text being entered 
+        on the "command line" at the bottom of the screen.
+
+ RightArrow ..................... ESC-l ... Move cursor right one character.
+ LeftArrow ...................... ESC-h ... Move cursor left one character.
+ ctrl-RightArrow  ESC-RightArrow  ESC-w ... Move cursor right one word.
+ ctrl-LeftArrow   ESC-LeftArrow   ESC-b ... Move cursor left one word.
+ HOME ........................... ESC-0 ... Move cursor to start of line.
+ END ............................ ESC-$ ... Move cursor to end of line.
+ BACKSPACE ................................ Delete char to left of cursor.
+ DELETE ......................... ESC-x ... Delete char under cursor.
+ ctrl-BACKSPACE   ESC-BACKSPACE ........... Delete word to left of cursor.
+ ctrl-DELETE .... ESC-DELETE .... ESC-X ... Delete word under cursor.
+ ctrl-U ......... ESC (MS-DOS only) ....... Delete entire line.
+ UpArrow ........................ ESC-k ... Retrieve previous command line.
+ DownArrow ...................... ESC-j ... Retrieve next command line.
+ TAB ...................................... Complete filename & cycle.
+ SHIFT-TAB ...................... ESC-TAB   Complete filename & reverse cycle.
+ ctrl-L ................................... Complete filename, list all.

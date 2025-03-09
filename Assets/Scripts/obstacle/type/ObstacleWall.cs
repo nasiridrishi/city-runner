@@ -56,7 +56,7 @@ namespace obstacle.type
         {
             if (hit.gameObject.CompareTag("Player") && IsIntact())
             {
-                var playerMovement = hit.gameObject.GetComponent<PlayerMovement>();
+                var playerMovement = hit.gameObject.GetComponent<Player.Player>();
                 if (playerMovement != null && !playerMovement.IsDead)
                 {
                     playerMovement.IsDead = true;

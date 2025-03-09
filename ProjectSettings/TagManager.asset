@@ -9,6 +9,7 @@ TagManager:
   - TurnPoint
   - Wall
   - Spell
+  - Fire
   layers:
   - Default
   - TransparentFX
