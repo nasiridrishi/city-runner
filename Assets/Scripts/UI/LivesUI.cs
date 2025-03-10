@@ -1,17 +1,18 @@
-﻿using UnityEngine;
+﻿using Player;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 namespace UI
 {
+    [RequireComponent(typeof(PlayerLifeManager))]
     public class LivesUI : MonoBehaviour
     {
         [SerializeField] private Image[] lifeIcons; // Array of life icon images
-        [SerializeField] private TextMeshProUGUI livesText; // Optional text display
         [SerializeField] private Sprite fullLifeSprite;
         [SerializeField] private Sprite emptyLifeSprite;
         
-        private Player.PlayerLifeManager lifeManager;
+        private PlayerLifeManager lifeManager;
         
         private void Start()
         {
@@ -23,9 +24,10 @@ namespace UI
                 // Subscribe to events
                 lifeManager.OnLifeLost += UpdateLivesDisplay;
                 lifeManager.OnRespawn += UpdateLivesDisplay;
-                
-                // Initial update
-                UpdateLivesDisplay();
+            }
+            else
+            {
+                Debug.LogError("LivesUI: Could not find PlayerLifeManager in the scene!");
             }
         }
         
@@ -41,6 +43,9 @@ namespace UI
         
         private void UpdateLivesDisplay()
         {
+            Debug.Log(">>>>>>>> UpdateLivesDisplay");
+            int currentLives = lifeManager.CurrentLives;
+            Debug.Log("Current Lives: " + currentLives);
             // Update life icons if available
             if (lifeIcons != null && lifeIcons.Length > 0)
             {
@@ -48,7 +53,7 @@ namespace UI
                 {
                     if (lifeIcons[i] != null)
                     {
-                        if (i < lifeManager.CurrentLives)
+                        if (i < currentLives)
                         {
                             lifeIcons[i].sprite = fullLifeSprite;
                             lifeIcons[i].color = Color.white;
@@ -57,16 +62,11 @@ namespace UI
                         {
                             if (emptyLifeSprite != null)
                                 lifeIcons[i].sprite = emptyLifeSprite;
-                            lifeIcons[i].color = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Dimmed
+                            else
+                                lifeIcons[i].color = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Dimmed
                         }
                     }
                 }
-            }
-            
-            // Update text if available
-            if (livesText != null)
-            {
-                livesText.text = $"Lives: {lifeManager.CurrentLives}";
             }
         }
     }

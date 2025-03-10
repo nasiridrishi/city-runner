@@ -176,6 +176,10 @@ namespace Player
             {
                 Die();
             }
+            if (other.tag.Equals("coin"))
+            {
+                ScoreManager.instance.AddScore(1);
+            }
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)

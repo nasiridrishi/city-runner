@@ -17,7 +17,7 @@ namespace Player
         
         [Header("UI References")]
         [SerializeField] private GameObject livesDisplay; // Optional UI to show lives
-        
+
         private int currentLives;
         private Vector3 respawnPosition;
         private Quaternion respawnRotation;
@@ -35,6 +35,7 @@ namespace Player
         {
             // Initialize
             currentLives = maxLives;
+            Debug.Log("...Current lives:" + currentLives);
             playerController = GetComponent<Player>();
             turnHandler = GetComponent<PlayerTurnHandler>();
             
