@@ -12,12 +12,12 @@ namespace UI
         [SerializeField] private Sprite emptyLifeSprite;
         
         private Player.PlayerLifeManager lifeManager;
-        
+    
         private void Start()
         {
-            // Find player and get life manager
+              // Find player and get life manager
             lifeManager = FindObjectOfType<Player.PlayerLifeManager>();
-            
+
             if (lifeManager != null)
             {
                 // Subscribe to events
@@ -25,7 +25,7 @@ namespace UI
                 lifeManager.OnRespawn += UpdateLivesDisplay;
                 
                 // Initial update
-                UpdateLivesDisplay();
+                Invoke(nameof(UpdateLivesDisplay), 0.1f);
             }
         }
         
