@@ -120,7 +120,7 @@ namespace obstacle.type
             }
         }
 
-        // New coroutine to handle brick behavior after collision
+        // coroutine to handle brick behavior after collision
         private IEnumerator HandleBrickAfterCollision(GameObject brick)
         {
             // Wait for the brick to settle a bit

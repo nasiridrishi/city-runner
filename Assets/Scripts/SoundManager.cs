@@ -114,4 +114,11 @@ public class SoundManager : MonoBehaviour
     {
         effectSource.PlayOneShot(death);
     }
+    
+    // Add this method to your existing SoundManager class
+    public void PlayOneShot(AudioClip clip, float volumeScale = 1.0f)
+    {
+       //todo effectSource.PlayOneShot(clip, volumeScale);
+    }
+
 }
