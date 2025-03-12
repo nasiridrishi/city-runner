@@ -58,7 +58,7 @@ namespace Player
             // Reset magic state
             if (rgb != null)
             {
-                rgb.velocity = Vector3.zero;
+                rgb.linearVelocity = Vector3.zero;
                 rgb.angularVelocity = Vector3.zero;
             }
 
